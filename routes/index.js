@@ -1,11 +1,7 @@
 const express = require('express');
 const api = express.Router();
+const controller = require('../controllers');
 
-api.get('/getProducts',(req, res) => {
-  res.json({
-    msg: "Holaaaaaa! "
-  });
-});
-
+api.get('/getProducts',controller.getProducts);
 
 module.exports = { api }
