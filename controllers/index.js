@@ -1,6 +1,10 @@
 const { getProductsBD, getCategoriesBD } = require('../models');
 const { Op } = require('sequelize');
 
+/**
+ * Returns all the categories of the DB
+ * @returns All the categories
+ */
 async function getCategories(req, res){
   try {
     const categories = await getCategoriesBD();
@@ -16,6 +20,11 @@ async function getCategories(req, res){
   }
 }
 
+/**
+ * Returns all the products of the DB with a limit of 12
+ * @param {*} req Optional parameters such as search text, page number, result limit, order by, and order direction
+ * @returns All the products
+ */
 async function getProducts(req, res){
   try {
     
