@@ -2,6 +2,7 @@ const express = require('express');
 const {json, urlencoded} = require('body-parser');
 const { connection } = require('./database/db');
 const PORT = process.env.PORT || 3000;
+const { api } = require('./routes')
 
 const app = express();
 app.use(json());
@@ -21,4 +22,4 @@ app.listen(PORT,() => {
   console.log('Server running to port:'+ PORT);
 });
 
-
+app.use('',api);
