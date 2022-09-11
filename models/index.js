@@ -4,4 +4,10 @@ function getProductsBD(){
   }
 }
 
-module.exports = { getProductsBD }
+function getCategoriesBD(){
+  return{
+    msg: "Mensaje desde el model"
+  }
+}
+
+module.exports = { getProductsBD, getCategoriesBD }

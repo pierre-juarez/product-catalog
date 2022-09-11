@@ -1,4 +1,4 @@
-const { getProductsBD } = require('../models')
+const { getProductsBD, getCategoriesBD } = require('../models')
 
 function getProducts(req, res){
   const rpta = getProductsBD();
@@ -7,4 +7,11 @@ function getProducts(req, res){
   });
 }
 
-module.exports = { getProducts }
+function getCategories(req, res){
+  const rpta = getCategoriesBD();
+  res.json({
+    rpta
+  });
+}
+
+module.exports = { getProducts, getCategories }
