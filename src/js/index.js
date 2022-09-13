@@ -11,7 +11,7 @@ const $prevPage = document.querySelector("#prevPage");
 const $nextPage = document.querySelector("#nextPage");
 
 const url_api = "https://api-product-catalog.herokuapp.com"; //URL API
-let prevPageOption, nextPageOption, currentPageOption, orderOption, searchOption; //Variables globales
+let prevPageOption, nextPageOption, currentPageOption, orderOption, searchOption, categoryOption; //Variables globales
 
 getCategories(); //Call to the function that brings the categories
 getProduct(); // Call to the function that brings the categories
@@ -25,7 +25,7 @@ function getCategories() {
   fetch(`${url_api}/getCategories`) // Call to API
     .then(response => response.json())
     .then((resp) => {
-      (resp.status === "success") 
+      (resp.status === "success")
         ? renderCategoriesHTML(resp.data) // Render categories
         : console.error(resp.error); // Error message
     })
@@ -40,7 +40,7 @@ function renderCategoriesHTML(categories) {
 
   // Add to first filter
   $categoriesContainer.innerHTML = `
-    <a id="todos" class="category cursor-pointer rounded-full focus:outline-none focus:ring-2  focus:bg-indigo-50 focus:ring-indigo-800" onclick="changeCategory();">
+    <a id="todos" class="category cursor-pointer rounded-full focus:outline-none focus:ring-2  focus:bg-indigo-50 focus:ring-indigo-800" onclick="filterByCategory();">
         <div class="py-2 px-8 bg-indigo-100 text-indigo-700 rounded-full">
         Todos
         </div>
@@ -50,7 +50,7 @@ function renderCategoriesHTML(categories) {
   // Render the other filters
   categories.forEach((element) => {
     $categoriesContainer.innerHTML += `
-        <a id="category-${(element.id)}" class="category cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" onclick="changeCategory(this.id);" data-id-category="${element.id}">
+        <a id="category-${(element.id)}" class="category cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" onclick="filterByCategory(this.id);" data-id-category="${element.id}">
             <div class="py-2 px-8 text-gray-600 hover:text-indigo-700 hover:bg-indigo-100 rounded-full ">
                 <p>${capitalizeFirsLetter(element.name)}</p>
             </div>
@@ -70,11 +70,12 @@ function getProduct(page = 1) {
 
   const order = orderOption === undefined ? 'ASC' : orderOption; // Validate if there is an existing order by price option, default: 'ASC'
   const search = searchOption === undefined ? '' : `&text=${searchOption}`; // Validate if an existing search text exists, default: ''
-  
-  fetch(`${url_api}/getProducts?page=${page}&order_by=price&order_direction=${order}${search}`) // Call to API
+  const category = categoryOption === undefined ? '' : `&category=${categoryOption}`;
+
+  fetch(`${url_api}/getProducts?page=${page}&order_by=price&order_direction=${order}${search}${category}`) // Call to API
     .then(response => response.json())
     .then((resp) => {
-      (resp.status === "success" && resp.data.data.length > 0) 
+      (resp.status === "success" && resp.data.data.length > 0)
         ? renderProductsHTML(resp.data) // Render products
         : noProductFound(); // Render error message HTML
     })
@@ -96,7 +97,7 @@ function noProductFound() {
 
   $pagination.classList.add('hidden');
   $spnCountProducts.innerHTML = 'Mostrando (0) productos de (0)';
-  
+
 }
 
 
@@ -111,12 +112,12 @@ function renderProductsHTML(allData) {
   const { data, limit, total, currentPage, nextPage, previousPage } = allData; // Extract the variables that come from the JSON
 
   let url_image,
-  discount,
-  price_format,
-  symbol_money = "S./";
-  
+    discount,
+    price_format,
+    symbol_money = "S./";
+
   validatePagination(total, limit, currentPage, nextPage, previousPage); // Assign pagination actions
-  
+
   $productsContainer.innerHTML = '';
   $spnCountProducts.innerHTML = `Mostrando (${data.length}) productos de (${total})`; // Informative detail for the user
   data.forEach(product => {
@@ -157,44 +158,42 @@ function orderProductByPrice() {
   * @param {int} nextPage Next page number
   * @param {Int} previousPage Previous page number
   */
-function validatePagination(total, limit, currentPage, nextPage, previousPage){
-    
-    const nroPages = Math.round(total/limit); // Page numbers
-    console.log("🚀 ~ file: index.js ~ line 162 ~ validatePagination ~ total", total)
-    console.log("🚀 ~ file: index.js ~ line 162 ~ validatePagination ~ nroPages", nroPages)
-    
-    if(nroPages <= 1 || total === 0){ $pagination.classList.add('hidden'); return; } // If page number is <= 1, we stop the function and hide the HTML pagination
-        
-    prevPageOption = previousPage; // Assign value to global variables
-    nextPageOption = nextPage;
-    currentPageOption = currentPage;
+function validatePagination(total, limit, currentPage, nextPage, previousPage) {
 
-    if(previousPage === null){ // Validate if it is possible to RETURN to add or remove visual styles for the user
-      $prevPage.setAttribute('disabled',true);
-      $prevPage.classList.remove('hover:bg-indigo-400','hover:text-white');
-    }else{
-      $prevPage.removeAttribute('disabled'); 
-      $prevPage.classList.add('hover:bg-indigo-400','hover:text-white');
-      
-    }
+  const nroPages = Math.round(total / limit); // Page numbers
 
-    if(nextPage === null){ // Validate if it is possible to go to the NEXT to add or remove visual styles for the user
-      $nextPage.setAttribute('disabled',true);
-      $nextPage.classList.remove('hover:bg-indigo-400','hover:text-white');
-    }else{
-      $nextPage.removeAttribute('disabled');
-      $nextPage.classList.add('hover:bg-indigo-400','hover:text-white');
-    }
-    
-    $pagesContainer.innerHTML = '';
-    for (let i = 1; i <= nroPages; i++) {
-      const bg = currentPage === i ? 'bg-indigo-300' : 'bg-gray-300';   
-      $pagesContainer.innerHTML += `
+  if (nroPages <= 1 || total === 0) { $pagination.classList.add('hidden'); return; } // If page number is <= 1, we stop the function and hide the HTML pagination
+
+  prevPageOption = previousPage; // Assign value to global variables
+  nextPageOption = nextPage;
+  currentPageOption = currentPage;
+
+  if (previousPage === null) { // Validate if it is possible to RETURN to add or remove visual styles for the user
+    $prevPage.setAttribute('disabled', true);
+    $prevPage.classList.remove('hover:bg-indigo-400', 'hover:text-white');
+  } else {
+    $prevPage.removeAttribute('disabled');
+    $prevPage.classList.add('hover:bg-indigo-400', 'hover:text-white');
+
+  }
+
+  if (nextPage === null) { // Validate if it is possible to go to the NEXT to add or remove visual styles for the user
+    $nextPage.setAttribute('disabled', true);
+    $nextPage.classList.remove('hover:bg-indigo-400', 'hover:text-white');
+  } else {
+    $nextPage.removeAttribute('disabled');
+    $nextPage.classList.add('hover:bg-indigo-400', 'hover:text-white');
+  }
+
+  $pagesContainer.innerHTML = '';
+  for (let i = 1; i <= nroPages; i++) {
+    const bg = currentPage === i ? 'bg-indigo-300' : 'bg-gray-300';
+    $pagesContainer.innerHTML += `
       <button onclick="getProduct(${i})" class="flex items-center px-4 py-2 text-gray-500 ${bg} rounded-md hover:bg-indigo-400 hover:text-white">
         ${i}
       </button>
         `
-    }
+  }
 
 }
 
@@ -205,11 +204,11 @@ function searchParams() {
   let valor = $txtBuscador.value.trim(); // Text search
   if (valor !== '' || valor === ' ') { // If the text is not null we perform the search
     searchOption = valor; // Assign value to global variables 
-  } else { 
-    searchOption = undefined; 
+  } else {
+    searchOption = undefined;
     // getProduct(currentPageOption);
     // changeCategory();
-    
+
   }
   getProduct(currentPageOption); // Call to API
 }
@@ -218,13 +217,12 @@ function searchParams() {
  * Function that shows/hides the loader in the HTML DOM
  * @param {Boolean} status Boolean parameter to indicate the visibility of the loader
  */
-function loader(status){
-  console.log("🚀 ~ file: index.js ~ line 219 ~ loader ~ status", status)
-  if(status){ // Show loader
+function loader(status) {
+  if (status) { // Show loader
     $productsContainer.classList.add('hidden');
     $loaderButton.classList.remove('hidden');
     $pagination.classList.add('hidden');
-  }else{ // Hide loader
+  } else { // Hide loader
     $productsContainer.classList.remove('hidden');
     $loaderButton.classList.add('hidden');
     $pagination.classList.remove('hidden');
@@ -232,13 +230,48 @@ function loader(status){
 }
 
 /**
+* Function that returns the filtered products by SELECTED CATEGORY, obtained by the ID of the same
+* depending on the selection made
+* @param {number} category ID of the category to filter to make the request to the API
+*/
+function filterByCategory(category = null) {
+
+  $txtBuscador.value = "";
+  let categorys = document.querySelectorAll(".category"), div;
+
+  $cbxOrder.selectedIndex = 0;
+
+  categorys.forEach(element => {
+    div = document.querySelector('#' + element.id + ' div');
+    div.classList.remove('bg-indigo-100');
+    div.classList.remove('text-indigo-700');
+  });
+
+  if (category !== null) {
+    document.querySelector("#" + category + " div").classList.add('text-indigo-700');
+    document.querySelector("#" + category + " div").classList.add('bg-indigo-100');
+    let id_category = document.getElementById(category).getAttribute('data-id-category'); // foto.jpg
+    categoryOption = id_category;
+  }
+
+  div = document.querySelector("#todos div");
+
+  div.classList.add('text-indigo-700');
+  div.classList.add('bg-indigo-100');
+
+  if (category === null) { categoryOption = undefined; }
+
+  getProduct(currentPageOption);
+}
+
+/**
 * Function that capitalizes the first letter of some entered text
 * @param {*} str String or text to capitalize
 * @returns Returns the String or entered text capitalized only by the first letter
 */
-const capitalizeFirsLetter = (str) =>  str.charAt(0).toUpperCase() + str.slice(1); 
+const capitalizeFirsLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-$cbxOrder.addEventListener('change', () =>{ orderProductByPrice(); }); // Assign order by price function
-$prevPage.addEventListener('click',() => { getProduct(prevPageOption) }); // Assign the 'prevPage' parameter to the API call
-$nextPage.addEventListener('click',() => { getProduct(nextPageOption) }); // Assign the 'nextPage' parameter to the API call
-$txtBuscador.addEventListener('keyup', (e) => { if(e.keyCode === 13){ searchParams(); } }); // Validate if the user has pressed ENTER to perform the search
+$cbxOrder.addEventListener('change', () => { orderProductByPrice(); }); // Assign order by price function
+$prevPage.addEventListener('click', () => { getProduct(prevPageOption) }); // Assign the 'prevPage' parameter to the API call
+$nextPage.addEventListener('click', () => { getProduct(nextPageOption) }); // Assign the 'nextPage' parameter to the API call
+$txtBuscador.addEventListener('keyup', (e) => { if (e.keyCode === 13) { searchParams(); } }); // Validate if the user has pressed ENTER to perform the search
