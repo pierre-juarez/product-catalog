@@ -10,7 +10,7 @@ const $loaderButton = document.querySelector("#loaderButton");
 const $prevPage = document.querySelector("#prevPage");
 const $nextPage = document.querySelector("#nextPage");
 
-const url_api = "http://localhost:3000"; //URL API
+const url_api = "https://api-product-catalog.herokuapp.com"; //URL API
 let prevPageOption, nextPageOption, currentPageOption, orderOption, searchOption; //Variables globales
 
 getCategories(); //Call to the function that brings the categories
