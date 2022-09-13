@@ -33,17 +33,19 @@ async function getProducts(req, res){
       page,
       limit,
       order_by,
-      order_direction
+      order_direction,
+      category
     } = req.query;
-
+    
     let search = {}, order = [];
 
-    if(text){
+    if(text || category){
       search = {
         where: {
-          name: {
-            [Op.like]: `%${text}%` 
-          }
+          [Op.and]: [
+            (text) ? { name: { [Op.like]: `%${text}%` } } : '',
+           (category) ?  { category } : '' 
+          ],
         }
       };
     }
