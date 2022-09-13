@@ -65,6 +65,7 @@ node app
 ## Running deployments
 * Frontend: https://pierre-juarez.github.io/product-catalog/
 * Backend: https://api-product-catalog.herokuapp.com/
+* Documentación API: https://documenter.getpostman.com/view/22291554/2s7YYr9kHN
 
 ## Créditos
 
