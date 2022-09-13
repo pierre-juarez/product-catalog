@@ -6,7 +6,7 @@ _Desarrollo, despliegue y uso de una API de **/Consulta de Productos**  de  [BSA
 
 ## Módulos realizados 🤩
 
-- Creación y consumo de la [API](https://pierre-juarez.github.io/product-catalog/).
+- Creación y consumo de la [API](https://documenter.getpostman.com/view/22291554/2s7YYr9kHN).
 - Carga de productos.
 - Filtro de productos por categorías.
 - Búsquedad de productos por texto ingresado.
