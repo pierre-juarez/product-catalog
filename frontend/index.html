@@ -84,7 +84,7 @@
         </div>
         <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
           <div class="sm:flex items-center justify-between">
-            <div id="containerFilters" class="flex items-center">
+            <div id="categoriesContainer" class="flex items-center">
             </div>
           </div>
         </div>
@@ -113,7 +113,6 @@
           </div>
         </div>
       </nav>
-
       <div id="loaderButton" class="flex items-center justify-center p-40 w-full">
         <button disabled type="button"
           class="py-2.5 px-5 mr-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200  focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-indigo-400 dark:text-white dark:border-indigo-300 inline-flex items-center">
@@ -127,21 +126,24 @@
               fill="#1C64F2" />
           </svg> One moment, we are looking for the best drinks👀... </button>
       </div>
-
-      <div id="productContainer" class="container mx-auto flex items-center flex-wrap pt-4 pb-12 hidden">
+      <div id="productsContainer" class="container mx-auto flex items-center flex-wrap pt-4 pb-12 hidden">
       </div>
       <!------ ------- Pagination ------- ------>
-      <div id="pagination" class="flex items-center space-x-1 justify-center w-full">
-        <!-- <a href="#" class="flex items-center px-4 py-2 text-gray-500 bg-gray-300 rounded-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-                  </svg>
-              </a> -->
-        <!-- <a href="#" class="px-4 py-2 text-gray-500 bg-gray-300 rounded-md hover:bg-blue-400 hover:text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-              </a> -->
+      <div id="pagination" class="flex items-center space-x-1 justify-center w-full hidden">
+        <button type="button" id="prevPage" class="flex items-center px-4 py-2 text-gray-500 bg-gray-300 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          </svg>
+        </button>
+        <div id="pagesContainer" class="flex gap-1">
+          
+
+        </div>
+        <button id="nextPage" class="px-4 py-2 text-gray-500 bg-gray-300 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
       </div>
       <!------ ------- Pagination ------- ------>
     </div>
